@@ -45,7 +45,7 @@ class RdStationAPI:
 
 
     def fetch_leads_from_segmentation(self, segmentation_id):
-        url = f"{self.host}/platform/segmentations/{}/contacts?page={}&page_size=125"
+        url = "{}/platform/segmentations/{}/contacts?page={}&page_size=125"
         contacts = []   
 
         page = 1
@@ -57,7 +57,7 @@ class RdStationAPI:
         }
         while True:
             print("Request -> id: ", id, f"| page:{page}")
-            temp_contacts_json = requests.get(url.format(segmentation_id, page), headers=headers).json()
+            temp_contacts_json = requests.get(url.format(self.host,segmentation_id, page), headers=headers).json()
             if  'contacts' in temp_contacts_json.keys():
                 temp_contacts = temp_contacts_json['contacts']
                 
