@@ -6,6 +6,8 @@ class RdStationAPI:
         self.host = "https://api.rd.services"
         self.token = self.make_access_token(client_id, client_secret, refresh_token)
 
+
+    
     def make_access_token(self, client_id, client_secret, refresh_token):
         json = {
         "client_id": client_id,
@@ -20,6 +22,26 @@ class RdStationAPI:
         resp = requests.post(url=f'{self.host}/auth/token',headers= header, json=json).json()
 
         return resp['access_token']
+
+    def get(self, url):
+        headers = {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {self.token}"
+                }
+        return requests.get(url, headers=headers)
+
+
+    def fetch_analytics_workflow_emails(self, start_date, end_date):
+        result = self.get(f'{self.host}/platform/analytics/workflow_emails?start_date={start_date}&end_date={end_date}')
+        print(f"Status code: {result.status_code}")
+        return result.json()['workflow_email_statistics']
+
+
+    def fetch_analytics_emails(self, start_date, end_date):
+        result = self.get(f'{self.host}/platform/analytics/emails?start_date={start_date}&end_date={end_date}')
+        print(f"Status code: {result.status_code}")
+        return result.json()['emails']
+
 
     def fetch_segmentations(self):
         # get segmentations
